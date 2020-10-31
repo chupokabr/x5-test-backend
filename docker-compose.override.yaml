@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  x5-app:
+    build:
+      context: .
+      dockerfile: docker/php.Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 80:80
+
+  x5-pgsql:
+    volumes:
+      - ./docker/pgsql/data:/var/lib/postgresql/data/

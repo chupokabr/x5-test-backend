@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  x5-app:
+    container_name: x5-app
+    image: ${CI_REGISTRY:-cr.yandex}/${CI_PROJECT_NAMESPACE:-x5-retail}/${CI_PROJECT_NAME:-x5-test-backend}:${CI_COMMIT_REF_SLUG:-local}.${CI_PIPELINE_ID:-1}
+    environment:
+      - APP_KEY="base64:l7J0+k1XXfSyAIBrQQGki4r/jLx3Io1XKgTkIrsXgqU="
+      - APP_ENV=production
+      - APP_DEBUG=true
+      - DB_PORT=5432
+      - DB_CONNECTION=pgsql
+      - DB_HOST=x5-pgsql
+      - DB_DATABASE=x5_test_db
+      - DB_USERNAME=x5_user
+      - DB_PASSWORD=x5_user_password
+      - LOG_CHANNEL=stderr
+    depends_on:
+      - x5-pgsql
+    restart: always
+
+  x5-pgsql:
+    container_name: x5-pgsql
+    image: "postgres"
+    environment:
+      - POSTGRES_USER=x5_user
+      - POSTGRES_PASSWORD=x5_user_password
+      - POSTGRES_DB=x5_test_db
+    restart: always

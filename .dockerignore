@@ -1,0 +1,9 @@
+.git
+.gitignore
+.env
+vendor
+bootstrap/cache/*
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+composer.lock

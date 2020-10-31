@@ -1,0 +1,145 @@
+---
+swagger: "2.0"
+info:
+  description: "Authorization Api"
+  version: "1.0.0"
+  title: "User Tables Authorization Api"
+  contact:
+    email: "prokshina@artw.ru"
+host: "virtserver.swaggerhub.com"
+basePath: "/A2831/x5api/1.0.0"
+tags:
+- name: "admins"
+  description: "Secured Admin-only calls"
+- name: "developers"
+  description: "Operations available to regular developers"
+schemes:
+- "https"
+paths:
+  /auth/register:
+    post:
+      summary: "registration"
+      description: "register new user"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "user name"
+        required: true
+        type: "string"
+      - name: "email"
+        in: "query"
+        description: "email, will be using as login"
+        required: true
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "password"
+        in: "query"
+        required: true
+        type: "string"
+        maximum: 16
+        minimum: 8
+        format: "string"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Users"
+        "400":
+          description: "bad input parameter"
+          schema:
+            $ref: "#/definitions/Error"
+  /auth/login:
+    post:
+      tags:
+      - "default"
+      summary: "authorization"
+      description: ""
+      operationId: "searchInventory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success"
+          schema:
+            $ref: "#/definitions/Users"
+        "400":
+          description: "bad input parameter"
+          schema:
+            $ref: "#/definitions/Error"
+  /user/info:
+    get:
+      tags:
+      - "default"
+      summary: "get user info"
+      description: "get user info by token"
+      operationId: "getInfo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "user token"
+        required: false
+        type: "string"
+      responses:
+        "201":
+          description: "user data"
+          schema:
+            $ref: "#/definitions/Token"
+        "400":
+          description: "invalid input, object invalid"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "access denied"
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Users:
+    type: "object"
+    properties:
+      status:
+        type: "boolean"
+        example: true
+      user:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+            format: "integer"
+            example: 1
+          name:
+            type: "string"
+            example: "Alexandra"
+          email:
+            type: "string"
+            example: "test@site.ru"
+  Token:
+    type: "object"
+    properties:
+      status:
+        type: "boolean"
+        example: true
+      token:
+        type: "string"
+  Error:
+    type: "object"
+    properties:
+      status:
+        type: "boolean"
+        example: false
+      error:
+        type: "string"
+        example: "error text"
